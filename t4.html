@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Analyse spécifique de texte</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    textarea {
+      width: 100%;
+      max-width: 500px;
+      height: 250px;
+    }
+    table {
+      width: 100%;
+      max-width: 500px;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+    }
+    th {
+      background-color: #f4f4f4;
+    }
+  </style>
+</head>
+<body>
+<textarea id="inputText" placeholder="Collez ici le texte complet..."></textarea>
+  <br>
+  <button onclick="analyserTexte()">Analyser</button>
+
+  <table id="resultTable" style="display: none;">
+    <thead>
+      <tr>
+        <th>Champ</th>
+        <th>Valeur</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    const champsCibles = {
+      "Date d'intervention [URGDTDEP]": "Date d'intervention",
+      "Nom marital ou nom d'usage [N]": "Nom2",
+      "Nom de jeune fille [JF]": "Nom de jeune fille",
+      "Prénom [P]": "Prénom",
+      "Age  [A]": "Âge",
+      "Maladies / Antécédents  [ATCA]": "Maladies / Antécédents",
+      "M-Traitements [TTT]": "M-Traitements",
+      "Que s'est il passé ? [OBSERV]": "Observation",
+      "Fréquence respiratoire (/mn) [FV#3]": "Fréquence respiratoire",
+      "SAT O2 (%) [SAT]": "SAT O2",
+      "Fréquence cardiaque [FC#4]": "Fréquence cardiaque",
+      "P.A BG [PABG]": "P.A BG",
+      "P.A BD [DIAD]": "P.A BD",
+      "Température (°C) [TEMP]": "Température"
+    };
+
+    function analyserTexte() {
+      const texte = document.getElementById("inputText").value;
+      const lignes = texte.split("\n");
+      const tbody = document.querySelector("#resultTable tbody");
+console.log(tbody);
+      tbody.innerHTML = ""; // Réinitialiser
+
+      lignes.forEach(ligne => {
+        const [champComplet, valeur] = ligne.split(" : ");
+        if (champComplet && valeur && champsCibles[champComplet.trim()]) {
+          const nomChamp = champsCibles[champComplet.trim()];
+          const ligneHTML = `<tr><td>${nomChamp}</td><td>${valeur.trim()}</td></tr>`;
+          tbody.innerHTML += ligneHTML;
+        }
+      });
+
+      document.getElementById("resultTable").style.display = "table";
+    }
+  </script>
+
+</body>
+</html>
